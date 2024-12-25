@@ -22,6 +22,9 @@ jobs:
           git config --global user.email "yonatangr86@gmail.com"
           git remote set-url origin https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_TOKEN }}@github.com/YonatanG86/simple-java-maven-app.git
 
+      - name: Debug Git Remote
+        run: git remote -v
+
       # Step 3: Set up Java and Maven
       - name: Set up JDK
         uses: actions/setup-java@v4
@@ -33,12 +36,19 @@ jobs:
 
       # Step 4: Prepare Maven Release
       - name: Prepare Maven Release
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
         run: |
           mvn release:prepare -DreleaseVersion=1.0.0 -DdevelopmentVersion=1.1.0-SNAPSHOT \
-            -DscmCommentPrefix="[Release] " -B -DpushChanges=true
+            -Dusername=${GIT_USERNAME} -Dpassword=${GIT_PASSWORD} \
+            -DscmCommentPrefix="[Release] " -B
 
       # Step 5: Perform Maven Release
       - name: Perform Maven Release
+        env:
+          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
+          GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
         run: |
           mvn release:perform -B
 

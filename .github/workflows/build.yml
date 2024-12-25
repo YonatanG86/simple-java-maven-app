@@ -18,31 +18,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: (Optional) Set up JDK 17
-      # (You may omit this if you're not running 'mvn' commands locally during CI.)
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      # Step 3: (Optional) Bump Maven Version
-      # If you need to adjust the version in pom.xml, keep it. Otherwise remove.
+      # Step 2: (Optional) Bump Maven Version
       - name: Bump Maven Version
         id: bump
         uses: mickem/gh-action-bump-maven-version@v1.0.0
 
-      # Step 4: (Removed) Build with Maven
-      # No longer needed because Dockerfile handles the Maven build.
-
-      # Step 5: Log in to Docker Hub
+      # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 6: Build and Push Docker Image (multi-stage build included in Dockerfile)
+      # Step 4: Build and Push Docker Image (multi-stage build included in Dockerfile)
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v3
         with:
@@ -50,7 +38,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
 
-      # Step 7: Deploy and Test
+      # Step 5: Deploy and Test
       - name: Deploy and Test
         run: |
           # Run the container

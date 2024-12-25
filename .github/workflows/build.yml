@@ -36,7 +36,9 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
+            ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:${{ steps.bump.outputs.newVersion }}
 
       # Step 5: Deploy and Test
       - name: Deploy and Test

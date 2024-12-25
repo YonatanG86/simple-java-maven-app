@@ -34,67 +34,48 @@ jobs:
       - name: Set up Maven
         uses: s4u/setup-maven-action@v1.17.0
 
-      # Step 4: Increment Version Dynamically
-      - name: Increment Version Dynamically
-        id: version
-        run: |
-          # Extract current version from pom.xml
-          CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed 's/-SNAPSHOT//')
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
-
-          # Increment the patch version
-          PATCH=$((PATCH + 1))
-          RELEASE_VERSION="$MAJOR.$MINOR.$PATCH"
-          DEVELOPMENT_VERSION="$MAJOR.$MINOR.$((PATCH + 1))-SNAPSHOT"
-
-          # Export the new versions as environment variables
-          echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
-          echo "DEVELOPMENT_VERSION=$DEVELOPMENT_VERSION" >> $GITHUB_ENV
-
-      # Step 5: Prepare Maven Release
+      # Step 4: Prepare Maven Release
       - name: Prepare Maven Release
         env:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
         run: |
-          mvn release:prepare -B \
-            -DreleaseVersion=${{ env.RELEASE_VERSION }} \
-            -DdevelopmentVersion=${{ env.DEVELOPMENT_VERSION }} \
+          mvn release:prepare -DreleaseVersion=1.0.1 -DdevelopmentVersion=1.0.0 \
             -Dusername=${GIT_USERNAME} -Dpassword=${GIT_PASSWORD} \
-            -DscmCommentPrefix="[Release] "
+            -DscmCommentPrefix="[Release] " -B
 
-      # Step 6: Perform Maven Release
+      # Step 5: Perform Maven Release
       - name: Perform Maven Release
         env:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
         run: |
-          mvn release:perform -B
+          mvn release:perform -Darguments="-DskipDeploy=true" -B
 
-      # Step 7: Build the application
+      # Step 6: Build the application
       - name: Build with Maven
         run: mvn clean package
 
-      # Step 8: Log in to Docker Hub
+      # Step 7: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 9: Build and Push Docker Image
+      # Step 8: Build and Push Docker Image
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v3
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:${{ env.RELEASE_VERSION }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
 
-      # Step 10: Deploy and Test
+      # Step 9: Deploy and Test
       - name: Deploy and Test
         run: |
           # Run the container
-          CONTAINER_ID=$(docker run -d -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:${{ env.RELEASE_VERSION }})
+          CONTAINER_ID=$(docker run -d ygsol86/simple-java-maven-app:latest)
 
           # Wait a moment for the container to start
           sleep 2

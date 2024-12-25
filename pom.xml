@@ -10,12 +10,11 @@
 
   <!-- SCM Configuration (moved to the correct location) -->
   <scm>
-    <connection>scm:git:git@github.com:YonatanG86/simple-java-maven-app.git</connection>
-    <developerConnection>scm:git:git@github.com:YonatanG86/simple-java-maven-app.git</developerConnection>
+    <connection>scm:git:https://github.com/YonatanG86/simple-java-maven-app.git</connection>
+    <developerConnection>scm:git:https://github.com/YonatanG86/simple-java-maven-app.git</developerConnection>
     <url>https://github.com/YonatanG86/simple-java-maven-app</url>
     <tag>HEAD</tag>
   </scm>
-
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

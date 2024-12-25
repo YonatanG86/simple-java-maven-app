@@ -26,8 +26,8 @@ jobs:
       # Debug step to see what newVersion is
       - name: Debug newVersion
         run: |
-          echo "Bumped version is: ${{ steps.bump.outputs.Version }}"
-          echo "Bumped version is: ${{ steps.bump.outputs.DnewVersion }}"
+          echo "Bumped version is: ${{ steps.bump.outputs.newVersion }}"
+          echo "Old version was:   ${{ steps.bump.outputs.oldVersion }}"
 
       # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub
@@ -44,7 +44,6 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
-            ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:${{ steps.bump.outputs.version }}
 
       # Step 5: Deploy and Test
       - name: Deploy and Test

@@ -82,9 +82,9 @@
         <version>3.0.0-M5</version>
         <configuration>
           <scm>
-            <connection>scm:git:git@github.com:YOUR_USERNAME/YOUR_REPOSITORY.git</connection>
-            <developerConnection>scm:git:git@github.com:YOUR_USERNAME/YOUR_REPOSITORY.git</developerConnection>
-            <url>https://github.com/YOUR_USERNAME/YOUR_REPOSITORY</url>
+            <connection>scm:git:git@github.com:YonatanG86/simple-java-maven-app.git</connection>
+            <developerConnection>scm:git:git@github.com:YonatanG86/simple-java-maven-app.git</developerConnection>
+            <url>https://github.com/YonatanG86/simple-java-maven-app</url>
           </scm>
           <tagNameFormat>@{project.version}</tagNameFormat>
           <autoVersionSubmodules>true</autoVersionSubmodules>

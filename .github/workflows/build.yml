@@ -38,9 +38,6 @@ jobs:
       - name: Prepare Maven Release
         run: mvn release:prepare -DreleaseVersion=1.0.0 -DdevelopmentVersion=1.1.0-SNAPSHOT -DscmCommentPrefix="[Release] " -B -DpushChanges=false
 
-      - name: Perform Maven Release
-        run: mvn release:perform -B
-
       # Step 5: Build the application
       - name: Build with Maven
         run: mvn clean package

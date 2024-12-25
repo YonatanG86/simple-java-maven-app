@@ -22,6 +22,10 @@ jobs:
       - name: Bump Maven Version
         id: bump
         uses: mickem/gh-action-bump-maven-version@v1.0.0
+        with:
+          release-type: 'patch'
+          pom-file: './submodule/pom.xml'
+          commit: true
 
       # Step 2: Export bumped version as environment variable
       - name: Export Bumped Version

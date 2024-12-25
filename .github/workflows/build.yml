@@ -29,15 +29,17 @@ jobs:
         uses: s4u/setup-maven-action@v1.17.0
 
       # Step 4: Increment the Patch Version
-      - name: Increment version
-        id: version
+      - name: Configure Git
         run: |
-          CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          PATCH=$(echo $CURRENT_VERSION | awk -F. '{print $3+1}')
-          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2}')".$PATCH"
-          mvn versions:set -DnewVersion=$NEW_VERSION
-          mvn versions:commit
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          git config --global user.name "${{ secrets.GIT_USERNAME }}"
+          git config --global user.email "yonatangr86@gmail.com"
+          git remote set-url origin https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_TOKEN }}@github.com/YOUR_USERNAME/YOUR_REPOSITORY.git
+
+      - name: Prepare Maven Release
+        run: mvn release:prepare -DreleaseVersion=1.0.0 -DdevelopmentVersion=1.1.0-SNAPSHOT -DscmCommentPrefix="[Release] " -B -DpushChanges=false
+
+      - name: Perform Maven Release
+        run: mvn release:perform -B
 
       # Step 5: Build the application
       - name: Build with Maven

@@ -17,6 +17,8 @@
   </dependencies>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
   </properties>
   <build>
     <pluginManagement>
@@ -32,7 +34,7 @@
       </plugins>
     </pluginManagement>
     <plugins>
-      <!-- Maven Jar Plugin -->
+      <!-- Build an executable JAR -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
@@ -48,7 +50,7 @@
         </configuration>
       </plugin>
 
-      <!-- Maven Enforcer Plugin -->
+      <!-- Enforce Maven and Java versions -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
@@ -73,11 +75,21 @@
         </executions>
       </plugin>
 
-      <!-- Maven Release Plugin -->
+      <!-- Maven Release Plugin for versioning -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.0-M5</version>
+        <configuration>
+          <scm>
+            <connection>scm:git:git@github.com:YOUR_USERNAME/YOUR_REPOSITORY.git</connection>
+            <developerConnection>scm:git:git@github.com:YOUR_USERNAME/YOUR_REPOSITORY.git</developerConnection>
+            <url>https://github.com/YOUR_USERNAME/YOUR_REPOSITORY</url>
+          </scm>
+          <tagNameFormat>@{project.version}</tagNameFormat>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+        </configuration>
       </plugin>
     </plugins>
   </build>

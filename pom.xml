@@ -7,13 +7,14 @@
   <name>my-app</name>
   <url>https://maven.apache.org</url>
 
-  <!-- SCM Configuration (moved to the correct location) -->
+  <!-- SCM Configuration -->
   <scm>
     <connection>scm:git:https://github.com/YonatanG86/simple-java-maven-app.git</connection>
     <developerConnection>scm:git:https://github.com/YonatanG86/simple-java-maven-app.git</developerConnection>
     <url>https://github.com/YonatanG86/simple-java-maven-app</url>
     <tag>v1.0.0</tag>
   </scm>
+
   <dependencies>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -22,11 +23,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
   </properties>
+
   <build>
     <pluginManagement>
       <plugins>
@@ -95,4 +98,18 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <!-- Add any plugins specific to release builds -->
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

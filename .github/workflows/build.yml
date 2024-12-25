@@ -50,7 +50,7 @@ jobs:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
         run: |
-          mvn release:perform -B
+          mvn release:perform -Darguments="-DskipDeploy=true" -B
 
       # Step 6: Build the application
       - name: Build with Maven

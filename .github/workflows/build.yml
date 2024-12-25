@@ -27,11 +27,13 @@ jobs:
         run: git remote -v
 
       # Step 4: Bump Maven Version
+      # Step 4: Bump Maven Version
       - name: Bump Maven Version
-        uses: phips28/gh-action-bump-maven-version@v2
+        uses: phips28/gh-action-bump-maven-version@v9
         id: bump_version
         with:
-          type: patch # Can be major, minor, or patch
+          tag-prefix: 'v' # Optional: tag prefix
+          default: 'patch' # Can be 'major', 'minor', or 'patch'
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 

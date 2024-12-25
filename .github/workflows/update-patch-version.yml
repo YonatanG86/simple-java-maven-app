@@ -1,0 +1,43 @@
+name: Update Patch Version
+
+on:
+  push:
+    branches:
+      - main  # Trigger workflow on push to main branch
+  workflow_dispatch:  # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Java and Maven
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      # Step 3: Increment Patch Version
+      - name: Increment Patch Version
+        run: |
+          VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
+          PATCH=$(echo $VERSION | awk -F. '{print $3+1}')
+          NEW_VERSION="$(echo $VERSION | awk -F. '{print $1"."$2}')".$PATCH
+          mvn versions:set -DnewVersion=$NEW_VERSION
+          echo "Updated version to $NEW_VERSION"
+
+      # Step 4: Commit and Push Changes
+      - name: Commit and Push
+        run: |
+          git config --global user.name "GitHub Actions Bot"
+          git config --global user.email "actions@github.com"
+          git add pom.xml
+          git commit -m "Increment patch version to $NEW_VERSION"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

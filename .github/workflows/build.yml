@@ -56,7 +56,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ygsol86/simple-java-maven-app:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
 
       # Step 8: Deploy and Test
       - name: Deploy and Test

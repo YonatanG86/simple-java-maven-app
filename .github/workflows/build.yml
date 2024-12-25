@@ -26,7 +26,8 @@ jobs:
       # Debug step to see what newVersion is
       - name: Debug newVersion
         run: |
-          echo "Bumped version is: ${{ steps.bump.outputs.version }}"
+          echo "Bumped version is: ${{ steps.bump.outputs.Version }}"
+          echo "Bumped version is: ${{ steps.bump.outputs.DnewVersion }}"
 
       # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub

@@ -18,10 +18,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: (Optional) Bump Maven Version
+      # Step 2: Bump Maven Version
       - name: Bump Maven Version
         id: bump
         uses: mickem/gh-action-bump-maven-version@v1.0.0
+
+      # Debug step to see what newVersion is
+      - name: Debug newVersion
+        run: |
+          echo "Bumped version is: ${{ steps.bump.outputs.newVersion }}"
 
       # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub

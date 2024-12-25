@@ -25,11 +25,12 @@ jobs:
       # Step 3: Increment the Patch Version
       - name: Increment version
         run: |
-          VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" pom.xml)
-          PATCH=$(echo $VERSION | awk -F. '{print $3+1}')
-          NEW_VERSION="$(echo $VERSION | awk -F. '{print $1"."$2}')".$PATCH
+          CURRENT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          PATCH=$(echo $CURRENT_VERSION | awk -F. '{print $3+1}')
+          NEW_VERSION=$(echo $CURRENT_VERSION | awk -F. '{print $1"."$2}')".$PATCH"
           mvn versions:set -DnewVersion=$NEW_VERSION
-          echo "New version: $NEW_VERSION"
+          mvn versions:commit
+          echo "Updated version to: $NEW_VERSION"
 
       # Step 4: Build the application
       - name: Build with Maven
@@ -50,11 +51,11 @@ jobs:
       # Step 7: Push Docker Image
       - name: Push Docker Image
         run: |
-          docker push <your-dockerhub-username>/simple-java-maven-app:latest
+          docker push ygsol86/simple-java-maven-app:latest
 
       # Step 8: Deploy and Test
       - name: Deploy with Docker
         run: |
-          docker run -d -p 8080:8080 <your-dockerhub-username>/simple-java-maven-app:latest
+          docker run -d -p 8080:8080 ygsol86/simple-java-maven-app:latest
+          sleep 10
           curl -f http://localhost:8080
-

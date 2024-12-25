@@ -23,11 +23,19 @@ jobs:
         id: bump
         uses: mickem/gh-action-bump-maven-version@v1.0.0
 
-      # Debug step to see what newVersion is
+      # Step 2: Export bumped version as environment variable
+      - name: Export Bumped Version
+        run: echo "BUMPED_VERSION=${{ steps.bump.outputs.newVersion }}" >> $GITHUB_ENV
+
+      # Debug step to see what BUMPED_VERSION holds
       - name: Debug newVersion
         run: |
-          echo "Bumped version is: ${{ steps.bump.outputs.newVersion }}"
-          echo "Old version was:   ${{ steps.bump.outputs.oldVersion }}"
+          echo "Bumped version is: $BUMPED_VERSION"
+
+      # Step 3: Use the version (for example, building a Docker tag)
+      - name: Another Step Using the Version
+        run: |
+          echo "Using version: $BUMPED_VERSION"
 
       # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub

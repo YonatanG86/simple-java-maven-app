@@ -18,23 +18,37 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Bump Maven Version
+      # Step 2: Set up Java and Maven
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Install Maven 3.9.2
+        run: |
+          wget https://downloads.apache.org/maven/maven-3/3.9.2/binaries/apache-maven-3.9.2-bin.tar.gz
+          tar -xzf apache-maven-3.9.2-bin.tar.gz
+          sudo mv apache-maven-3.9.2 /opt/maven
+          echo "export PATH=/opt/maven/bin:\$PATH" >> $GITHUB_ENV
+
+      # Step 3: Bump Maven Version
       - name: Bump Maven Version
         id: bump
         uses: mickem/gh-action-bump-maven-version@v1.0.0
 
-      # Step 5: Build the application
+      # Step 4: Build the application
       - name: Build with Maven
         run: mvn clean package
 
-      # Step 6: Log in to Docker Hub
+      # Step 5: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 7: Build and Push Docker Image
+      # Step 6: Build and Push Docker Image
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v3
         with:
@@ -42,7 +56,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
 
-      # Step 8: Deploy and Test
+      # Step 7: Deploy and Test
       - name: Deploy and Test
         run: |
           # Run the container

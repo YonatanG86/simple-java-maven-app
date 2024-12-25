@@ -3,7 +3,7 @@
   <groupId>com.mycompany.app</groupId>
   <artifactId>my-app</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.8-SNAPSHOT</version>
+  <version>1.0.9</version>
   <name>my-app</name>
   <url>https://maven.apache.org</url>
 
@@ -12,7 +12,7 @@
     <connection>scm:git:https://github.com/YonatanG86/simple-java-maven-app.git</connection>
     <developerConnection>scm:git:https://github.com/YonatanG86/simple-java-maven-app.git</developerConnection>
     <url>https://github.com/YonatanG86/simple-java-maven-app</url>
-    <tag>v1.0.0</tag>
+    <tag>v1.0.9</tag>
   </scm>
 
   <dependencies>

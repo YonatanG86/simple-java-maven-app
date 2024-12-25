@@ -9,68 +9,32 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
 
     steps:
       # Step 1: Checkout the code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Configure Git
-      - name: Configure Git
-        run: |
-          git config --global user.name "${{ secrets.GIT_USERNAME }}"
-          git config --global user.email "yonatangr86@gmail.com"
-          git remote set-url origin https://${{ secrets.GIT_USERNAME }}:${{ secrets.GIT_TOKEN }}@github.com/YonatanG86/simple-java-maven-app.git
-
-      # Step 3: Debug Git Remote
-      - name: Debug Git Remote
-        run: git remote -v
-
-      # Step 4: Bump Maven Version
-      # Step 4: Bump Maven Version
+      # Step 2: Bump Maven Version
       - name: Bump Maven Version
-        uses: phips28/gh-action-bump-maven-version@v9
-        id: bump_version
-        with:
-          tag-prefix: 'v' # Optional: tag prefix
-          default: 'patch' # Can be 'major', 'minor', or 'patch'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        id: bump
+        uses: mickem/gh-action-bump-maven-version@v1.0.0
 
-      # Step 5: Prepare Maven Release
-      - name: Prepare Maven Release
-        env:
-          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-          GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
-        run: |
-          mvn release:prepare \
-            -DreleaseVersion=${{ steps.bump_version.outputs.new_version }} \
-            -DdevelopmentVersion=${{ steps.bump_version.outputs.new_version }}-SNAPSHOT \
-            -Dusername=${GIT_USERNAME} \
-            -Dpassword=${GIT_PASSWORD} \
-            -DscmCommentPrefix="[Release] " \
-            -B
-
-      # Step 6: Perform Maven Release
-      - name: Perform Maven Release
-        env:
-          GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
-          GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
-        run: |
-          mvn release:perform -Darguments="-DskipDeploy=true" -B
-
-      # Step 7: Build the application
+      # Step 3: Build the application
       - name: Build with Maven
         run: mvn clean package
 
-      # Step 8: Log in to Docker Hub
+      # Step 4: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Step 9: Build and Push Docker Image
+      # Step 5: Build and Push Docker Image
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v3
         with:
@@ -78,7 +42,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/simple-java-maven-app:latest
 
-      # Step 10: Deploy and Test
+      # Step 6: Deploy and Test
       - name: Deploy and Test
         run: |
           CONTAINER_ID=$(docker run -d ygsol86/simple-java-maven-app:latest)

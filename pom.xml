@@ -32,8 +32,8 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- Maven Jar Plugin -->
       <plugin>
-        <!-- Build an executable JAR -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
         <version>3.4.2</version>
@@ -47,6 +47,8 @@
           </archive>
         </configuration>
       </plugin>
+
+      <!-- Maven Enforcer Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
@@ -69,6 +71,13 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+
+      <!-- Maven Release Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.0</version>
       </plugin>
     </plugins>
   </build>

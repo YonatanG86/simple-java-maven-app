@@ -40,7 +40,7 @@ jobs:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_TOKEN }}
         run: |
-          mvn release:prepare -DreleaseVersion=1.0.0 -DdevelopmentVersion=1.1.0-SNAPSHOT \
+          mvn release:prepare -DreleaseVersion=1.0.0 -DdevelopmentVersion=1.0.0-SNAPSHOT \
             -Dusername=${GIT_USERNAME} -Dpassword=${GIT_PASSWORD} \
             -DscmCommentPrefix="[Release] " -B
 
